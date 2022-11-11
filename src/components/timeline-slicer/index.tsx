@@ -11,7 +11,7 @@ import { YearView } from "./YearView";
 
 function TimelineSlicer() {
   const startDate = new Date(2022, 10, 11);
-  const endDate = new Date(2030, 0, 1);
+  const endDate = new Date(2024, 0, 1);
   const calender = getCalender(startDate, endDate);
 
   console.log("Calender", calender);
