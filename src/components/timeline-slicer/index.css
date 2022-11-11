@@ -1,0 +1,27 @@
+.ui-container {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  overflow-x: auto;
+  padding: 5px;
+}
+
+.sub-container {
+  display: flex;
+  min-width: fit-content;
+  flex-direction: row;
+  padding: 5px;
+}
+
+.year-box {
+  min-width: 50px;
+  padding: 5px;
+}
+
+.flex-box {
+  flex: 1;
+}
+
+.flex-box + .flex-box {
+  margin-left: 5px;
+}

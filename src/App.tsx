@@ -1,11 +1,15 @@
-import "./App.css";
+import { Container, CustomProvider } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
 import TimelineSlicer from "./components/timeline-slicer";
 
 function App() {
   return (
-    <div className="App">
-      <h3>Header</h3>
-      <TimelineSlicer />
+    <div style={{ textAlign: "center" }}>
+      <CustomProvider theme="light">
+        <Container>
+          <TimelineSlicer />
+        </Container>
+      </CustomProvider>
     </div>
   );
 }
