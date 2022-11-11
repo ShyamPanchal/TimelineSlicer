@@ -1,3 +1,20 @@
+import { useEffect, useRef } from "react";
+
+export const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 export interface Calender {
   [key: string]: {
     // year
@@ -6,6 +23,26 @@ export interface Calender {
       [key: string]: number[]; // month
     };
   };
+}
+
+export function useHorizontalScroll() {
+  const elRef: any = useRef();
+  useEffect(() => {
+    const el: any = elRef.current;
+    if (el) {
+      const onWheel = (e: any) => {
+        if (e.deltaY === 0) return;
+        e.preventDefault();
+        el.scrollTo({
+          left: el.scrollLeft + e.deltaY * 4,
+          behavior: "smooth",
+        });
+      };
+      el.addEventListener("wheel", onWheel);
+      return () => el.removeEventListener("wheel", onWheel);
+    }
+  }, []);
+  return elRef;
 }
 
 export const getCalender = (startDate: Date, endDate: Date) => {
@@ -19,7 +56,7 @@ export const getCalender = (startDate: Date, endDate: Date) => {
   ) {
     const _year = _date.getFullYear();
     const _quater = Math.floor(_date.getMonth() / 3) + 1;
-    const _month = _date.getMonth() + 1;
+    const _month = _date.getMonth();
     const _day = _date.getDate();
 
     if (!(_year in calender)) {

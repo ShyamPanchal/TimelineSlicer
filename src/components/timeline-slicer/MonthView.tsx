@@ -1,5 +1,5 @@
 import { Panel } from "rsuite";
-import { Calender } from "./utils";
+import { Calender, monthNames } from "./utils";
 
 export function MonthView(props: { calender: Calender }) {
   return (
@@ -9,7 +9,10 @@ export function MonthView(props: { calender: Calender }) {
           <Panel
             key={year + "-" + quater}
             className="flex-box"
-            style={{ flex: Object.values(months).length, padding: "0px" }}
+            style={{
+              flex: Object.values(months).length,
+              minWidth: "75px",
+            }}
             shaded
             bordered
             bodyFill
@@ -21,11 +24,12 @@ export function MonthView(props: { calender: Calender }) {
                   <Panel
                     key={month}
                     className="year-box flex-box"
+                    style={{ minWidth: "50px" }}
                     shaded
                     bordered
                     bodyFill
                   >
-                    {month}
+                    {monthNames[parseInt(month)]}
                   </Panel>
                 );
               })}

@@ -8,18 +8,19 @@ export function QuaterView(props: { calender: Calender }) {
         <Panel
           key={year}
           className="flex-box"
-          style={{ flex: Object.values(quaters).length, padding: "0px" }}
+          style={{ flex: Object.values(quaters).length, minWidth: "75px" }}
           shaded
           bordered
           bodyFill
         >
           {year}
-          <div className="ui-container">
+          <div className="sub-container">
             {Object.keys(quaters).map((quater) => {
               return (
                 <Panel
                   key={quater}
                   className="year-box flex-box"
+                  style={{ minWidth: "50px" }}
                   shaded
                   bordered
                   bodyFill
