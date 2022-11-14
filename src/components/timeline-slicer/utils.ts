@@ -74,7 +74,7 @@ export function useHorizontalScroll() {
 export const getCalender = (startDate: Date, endDate: Date) => {
   let calender: Calender = {
     years: {},
-    startDate: startDate,
+    startDate: new Date(startDate.getTime()),
     endDate: endDate,
   };
 
@@ -90,10 +90,12 @@ export const getCalender = (startDate: Date, endDate: Date) => {
     const _day = _date.getDate();
 
     if (!(_year in calender.years)) {
+      let _endDate = new Date(_year + 1, 0); // First day of next quater;
+      _endDate.setDate(0);
       calender.years[_year] = {
         quaters: {},
         startDate: new Date(_year, 0),
-        endDate: new Date(_year, 12, 31),
+        endDate: _endDate,
       };
     }
 

@@ -6,6 +6,9 @@ export function InputUI(props: {
   width?: number;
   startValue?: number;
   endValue?: number;
+
+  setStartIndex?: (index: number) => void;
+  setEndIndex?: (index: number) => void;
 }) {
   const styles = props.width ? { width: props.width } : {};
   const [leftSliderValue, setLeftSliderValue] = React.useState<number>(
@@ -27,6 +30,9 @@ export function InputUI(props: {
             rightSliderValue - 1
           );
           setLeftSliderValue(value);
+          if (props.setStartIndex) {
+            props.setStartIndex(value);
+          }
         }}
         step={1}
         className="thumb thumb--left"
@@ -43,6 +49,9 @@ export function InputUI(props: {
             leftSliderValue + 1
           );
           setRightSliderValue(value);
+          if (props.setEndIndex) {
+            props.setEndIndex(value);
+          }
         }}
         step={1}
         className="thumb thumb--right"

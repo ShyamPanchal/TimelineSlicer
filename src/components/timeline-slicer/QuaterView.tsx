@@ -3,7 +3,12 @@ import { Panel } from "rsuite";
 import { InputUI } from "./InputUI";
 import { Calender } from "./utils";
 
-export function QuaterView(props: { calender: Calender; sliderMax: number }) {
+export function QuaterView(props: {
+  calender: Calender;
+  sliderMax: number;
+  startDate?: Date;
+  endDate?: Date;
+}) {
   const ref: any = React.useRef(null);
   const [rangeWidth, setRangeWidth] = React.useState<number>(0);
   React.useEffect(() => {
@@ -12,9 +17,35 @@ export function QuaterView(props: { calender: Calender; sliderMax: number }) {
       setRangeWidth(ref.current.offsetWidth);
     }
   }, [ref.current]);
+
+  const [startDate, setStartDate] = React.useState<Date>(
+    props.startDate ? props.startDate : props.calender.startDate
+  );
+  const [endDate, setEndDate] = React.useState<Date>(
+    props.endDate ? props.endDate : props.calender.endDate
+  );
+
+  const updateStartIndex = (index: number) => {
+    const selectedYear = Object.keys(props.calender.years)[index - 1];
+    const year = props.calender.years[selectedYear];
+    setStartDate(year.startDate);
+  };
+
+  const updateEndIndex = (index: number) => {
+    const selectedYear = Object.keys(props.calender.years)[index - 2];
+    const year = props.calender.years[selectedYear];
+    setEndDate(year.endDate);
+  };
+
   return (
     <div style={{ position: "relative", overflowY: "hidden" }}>
-      <InputUI sliderMin={1} sliderMax={props.sliderMax} width={rangeWidth} />
+      <InputUI
+        sliderMin={1}
+        sliderMax={props.sliderMax}
+        width={rangeWidth}
+        // setStartIndex={updateStartIndex}
+        // setEndIndex={updateEndIndex}
+      />
       <div className="ui-container" ref={ref}>
         {Object.entries(props.calender.years).map(([year, quaters]) => (
           <Panel
@@ -30,15 +61,21 @@ export function QuaterView(props: { calender: Calender; sliderMax: number }) {
           >
             {year}
             <div className="sub-container">
-              {Object.keys(quaters.quaters).map((quater) => {
+              {Object.entries(quaters.quaters).map(([quater, _quaterData]) => {
+                const selected =
+                  startDate <= _quaterData.endDate &&
+                  endDate >= _quaterData.startDate;
                 return (
                   <Panel
                     key={quater}
                     className="year-box flex-box"
-                    style={{ minWidth: "50px" }}
                     shaded
                     bordered
                     bodyFill
+                    style={{
+                      minWidth: "50px",
+                      backgroundColor: selected ? "#c8c8c8" : "transparent",
+                    }}
                   >
                     Q{quater}
                   </Panel>
