@@ -43,8 +43,8 @@
   -webkit-appearance: none;
   width: 100%;
   display: block;
-  height: 4px;
-  /* background: #d3d3d3; */
+  /* height: 4px; */
+  height: 0px;
   outline: none;
   opacity: 0.7;
   -webkit-transition: 0.2s;

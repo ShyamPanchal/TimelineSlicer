@@ -15,8 +15,12 @@ export function DayView(props: { calender: Calender; sliderMax: number }) {
   console.log("rangeWidth", rangeWidth);
   return (
     <div style={{ position: "relative" }}>
-      <InputUI sliderMin={1} sliderMax={props.sliderMax} width={rangeWidth} />
-      <InputUI sliderMin={1} sliderMax={props.sliderMax} width={rangeWidth} />
+      <InputUI
+        sliderMin={1}
+        sliderMax={props.sliderMax}
+        width={rangeWidth}
+        endValue={13}
+      />
       <div className="ui-container" ref={ref}>
         {Object.entries(props.calender).map(([year, quaters]) =>
           Object.entries(quaters).map(([quater, months]) =>

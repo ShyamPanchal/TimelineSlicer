@@ -4,24 +4,50 @@ export function InputUI(props: {
   sliderMin: number;
   sliderMax: number;
   width?: number;
-  value?: number;
+  startValue?: number;
+  endValue?: number;
 }) {
   const styles = props.width ? { width: props.width } : {};
-  const [value, setVal] = React.useState<number>(props.value ? props.value : 1);
+  const [leftSliderValue, setLeftSliderValue] = React.useState<number>(
+    props.startValue ? props.startValue : props.sliderMin
+  );
+  const [rightSliderValue, setRightSliderValue] = React.useState<number>(
+    props.endValue ? props.endValue : props.sliderMax
+  );
   return (
-    <input
-      type="range"
-      min={props.sliderMin}
-      max={props.sliderMax}
-      value={value}
-      onChange={(event) => {
-        // const value = Math.min(Number(event.target.value), props.sliderMax - 1);
-        setVal(Number(event.target.value));
-        // minValRef.current = value;
-      }}
-      step={1}
-      className="thumb thumb--left"
-      style={styles}
-    />
+    <>
+      <input
+        type="range"
+        min={props.sliderMin}
+        max={props.sliderMax}
+        value={leftSliderValue}
+        onChange={(event) => {
+          const value = Math.min(
+            Number(event.target.value),
+            rightSliderValue - 1
+          );
+          setLeftSliderValue(value);
+        }}
+        step={1}
+        className="thumb thumb--left"
+        style={styles}
+      />
+      <input
+        type="range"
+        min={props.sliderMin}
+        max={props.sliderMax}
+        value={rightSliderValue}
+        onChange={(event) => {
+          const value = Math.max(
+            Number(event.target.value),
+            leftSliderValue + 1
+          );
+          setRightSliderValue(value);
+        }}
+        step={1}
+        className="thumb thumb--right"
+        style={styles}
+      />
+    </>
   );
 }

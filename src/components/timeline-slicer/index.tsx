@@ -5,7 +5,6 @@ import { QuaterView } from "./QuaterView";
 
 import { Button, ButtonGroup, ButtonToolbar } from "rsuite";
 import { DayView } from "./DayView";
-import { InputUI } from "./InputUI";
 import { MonthView } from "./MonthView";
 import { Calender, getCalender, useHorizontalScroll } from "./utils";
 import { YearView } from "./YearView";
@@ -96,16 +95,16 @@ function TimelineSlicer() {
         </ButtonToolbar>
         <br />
         <div style={{ position: "relative" }}>
-          {ui !== "days" && (
-            <InputUI sliderMin={1} sliderMax={sliderMax} value={1} />
-          )}
-          {ui !== "days" && (
-            <InputUI sliderMin={1} sliderMax={sliderMax} value={2} />
-          )}
           <div ref={scrollRef} style={{ overflowX: "auto", zIndex: -1 }}>
-            {ui === "year" && <YearView calender={calender} />}
-            {ui === "quater" && <QuaterView calender={calender} />}
-            {ui === "months" && <MonthView calender={calender} />}
+            {ui === "year" && (
+              <YearView calender={calender} sliderMax={sliderMax} />
+            )}
+            {ui === "quater" && (
+              <QuaterView calender={calender} sliderMax={sliderMax} />
+            )}
+            {ui === "months" && (
+              <MonthView calender={calender} sliderMax={sliderMax} />
+            )}
             {ui === "days" && (
               <DayView calender={calender} sliderMax={sliderMax} />
             )}
