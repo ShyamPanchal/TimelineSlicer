@@ -16,14 +16,40 @@ export const monthNames = [
 ];
 
 export interface Calender {
-  [key: string]: {
-    // year
+  years: {
     [key: string]: {
-      // quater
-      [key: string]: number[]; // month
+      quaters: {
+        [key: string]: {
+          months: {
+            [key: string]: {
+              days: {
+                [key: string]: Date;
+              };
+              startDate: Date;
+              endDate: Date;
+            };
+          };
+          startDate: Date;
+          endDate: Date;
+        };
+      };
+      startDate: Date;
+      endDate: Date;
     };
   };
+  startDate: Date;
+  endDate: Date;
 }
+
+// export interface Calender {
+//   [key: string]: {
+//     // year
+//     [key: string]: {
+//       // quater
+//       [key: string]: number[]; // month
+//     };
+//   };
+// }
 
 export function useHorizontalScroll() {
   const elRef: any = useRef();
@@ -46,7 +72,11 @@ export function useHorizontalScroll() {
 }
 
 export const getCalender = (startDate: Date, endDate: Date) => {
-  let calender: Calender = {};
+  let calender: Calender = {
+    years: {},
+    startDate: startDate,
+    endDate: endDate,
+  };
 
   let _date: any = undefined;
   for (
@@ -59,20 +89,37 @@ export const getCalender = (startDate: Date, endDate: Date) => {
     const _month = _date.getMonth();
     const _day = _date.getDate();
 
-    if (!(_year in calender)) {
-      calender[_year] = {};
+    if (!(_year in calender.years)) {
+      calender.years[_year] = {
+        quaters: {},
+        startDate: new Date(_year, 0),
+        endDate: new Date(_year, 12, 31),
+      };
     }
 
-    if (!(_quater in calender[_year])) {
-      calender[_year][_quater] = {};
+    if (!(_quater in calender.years[_year].quaters)) {
+      let _endDate = new Date(_year, _quater * 3); // First day of next quater;
+      _endDate.setDate(0);
+      calender.years[_year].quaters[_quater] = {
+        months: {},
+        startDate: new Date(_year, (_quater - 1) * 3),
+        endDate: _endDate,
+      };
     }
 
-    if (!(_month in calender[_year][_quater])) {
-      calender[_year][_quater][_month] = [];
+    if (!(_month in calender.years[_year].quaters[_quater].months)) {
+      let _endDate = new Date(_year, _month + 1); // First day of next month;
+      _endDate.setDate(0);
+      calender.years[_year].quaters[_quater].months[_month] = {
+        days: {},
+        startDate: new Date(_year, _month),
+        endDate: _endDate,
+      };
     }
 
-    if (!(_day in calender[_year][_quater][_month])) {
-      calender[_year][_quater][_month].push(_day);
+    if (!(_day in calender.years[_year].quaters[_quater].months[_month].days)) {
+      calender.years[_year].quaters[_quater].months[_month].days[_day] =
+        new Date(_year, _month, _date);
     }
   }
   return calender;

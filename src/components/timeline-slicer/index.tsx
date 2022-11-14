@@ -1,5 +1,5 @@
 import { createRef, useState } from "react";
-import { Container, Content, Header } from "rsuite";
+import { Calendar, Container, Content, Header } from "rsuite";
 import "./index.css";
 import { QuaterView } from "./QuaterView";
 
@@ -15,30 +15,30 @@ const getSliderMax = (
 ) => {
   switch (ui) {
     case "year": {
-      return Object.keys(calender).length + 1;
+      return Object.keys(calender.years).length + 1;
     }
     case "quater": {
       let count = 1;
-      Object.values(calender).forEach(
-        (quaters) => (count += Object.keys(quaters).length)
+      Object.values(calender.years).forEach(
+        (year) => (count += Object.keys(year.quaters).length)
       );
       return count;
     }
     case "months": {
       let count = 1;
-      Object.values(calender).forEach((quaters) => {
-        Object.values(quaters).forEach(
-          (months) => (count += Object.keys(months).length)
+      Object.values(calender.years).forEach((year) => {
+        Object.values(year.quaters).forEach(
+          (quater) => (count += Object.keys(quater.months).length)
         );
       });
       return count;
     }
     case "days": {
       let count = 1;
-      Object.values(calender).forEach((quaters) => {
-        Object.values(quaters).forEach((months) => {
-          Object.values(months).forEach(
-            (days) => (count += Object.keys(days).length)
+      Object.values(calender.years).forEach((year) => {
+        Object.values(year.quaters).forEach((quater) => {
+          Object.values(quater.months).forEach(
+            (month) => (count += Object.keys(month.days).length)
           );
         });
       });
