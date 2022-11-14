@@ -1,13 +1,54 @@
-import { useState } from "react";
+import { createRef, useState } from "react";
 import { Container, Content, Header } from "rsuite";
 import "./index.css";
 import { QuaterView } from "./QuaterView";
 
 import { Button, ButtonGroup, ButtonToolbar } from "rsuite";
 import { DayView } from "./DayView";
+import { InputUI } from "./InputUI";
 import { MonthView } from "./MonthView";
-import { getCalender, useHorizontalScroll } from "./utils";
+import { Calender, getCalender, useHorizontalScroll } from "./utils";
 import { YearView } from "./YearView";
+
+const getSliderMax = (
+  calender: Calender,
+  ui: "year" | "quater" | "months" | "days"
+) => {
+  switch (ui) {
+    case "year": {
+      return Object.keys(calender).length + 1;
+    }
+    case "quater": {
+      let count = 1;
+      Object.values(calender).forEach(
+        (quaters) => (count += Object.keys(quaters).length)
+      );
+      return count;
+    }
+    case "months": {
+      let count = 1;
+      Object.values(calender).forEach((quaters) => {
+        Object.values(quaters).forEach(
+          (months) => (count += Object.keys(months).length)
+        );
+      });
+      return count;
+    }
+    case "days": {
+      let count = 1;
+      Object.values(calender).forEach((quaters) => {
+        Object.values(quaters).forEach((months) => {
+          Object.values(months).forEach(
+            (days) => (count += Object.keys(days).length)
+          );
+        });
+      });
+      return count;
+    }
+    default:
+      return 1;
+  }
+};
 
 function TimelineSlicer() {
   const startDate = new Date(2022, 10, 11);
@@ -17,6 +58,8 @@ function TimelineSlicer() {
   console.log("Calender", calender);
 
   const [ui, setUI] = useState<"year" | "quater" | "months" | "days">("year");
+
+  const sliderMax = getSliderMax(calender, ui);
 
   const enabled = (key: string) => (key === ui ? "primary" : "default");
 
@@ -52,11 +95,21 @@ function TimelineSlicer() {
           </ButtonGroup>
         </ButtonToolbar>
         <br />
-        <div ref={scrollRef} style={{ overflowX: "auto" }}>
-          {ui === "year" && <YearView calender={calender} />}
-          {ui === "quater" && <QuaterView calender={calender} />}
-          {ui === "months" && <MonthView calender={calender} />}
-          {ui === "days" && <DayView calender={calender} />}
+        <div style={{ position: "relative" }}>
+          {ui !== "days" && (
+            <InputUI sliderMin={1} sliderMax={sliderMax} value={1} />
+          )}
+          {ui !== "days" && (
+            <InputUI sliderMin={1} sliderMax={sliderMax} value={2} />
+          )}
+          <div ref={scrollRef} style={{ overflowX: "auto", zIndex: -1 }}>
+            {ui === "year" && <YearView calender={calender} />}
+            {ui === "quater" && <QuaterView calender={calender} />}
+            {ui === "months" && <MonthView calender={calender} />}
+            {ui === "days" && (
+              <DayView calender={calender} sliderMax={sliderMax} />
+            )}
+          </div>
         </div>
       </Content>
     </Container>
