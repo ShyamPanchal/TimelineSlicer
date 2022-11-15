@@ -16,7 +16,8 @@ export function YearView(props: {
     if (ref.current) {
       setRangeWidth(ref.current.offsetWidth);
     }
-  }, [ref.current]);
+  }, []);
+  // }, [ref.current]);
 
   const [startDate, setStartDate] = React.useState<Date>(
     props.startDate ? props.startDate : props.calender.startDate
@@ -36,6 +37,16 @@ export function YearView(props: {
     const year = props.calender.years[selectedYear];
     setEndDate(year.endDate);
   };
+
+  const bottomRef: any = React.useRef(null);
+
+  React.useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({
+      behavior: "auto",
+      // behavior: "smooth"
+    });
+  }, [bottomRef.current]);
 
   return (
     <div style={{ position: "relative", overflowY: "hidden" }}>
@@ -57,12 +68,16 @@ export function YearView(props: {
               shaded
               bordered
               bodyFill
-              style={{ backgroundColor: selected ? "#c8c8c8" : "transparent" }}
+              style={{
+                backgroundColor: selected ? "#c8c8c8" : "transparent",
+              }}
             >
               {year}
             </Panel>
           );
         })}
+
+        <div ref={bottomRef} />
       </div>
     </div>
   );

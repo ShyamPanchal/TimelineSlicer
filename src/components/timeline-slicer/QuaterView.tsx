@@ -18,6 +18,15 @@ export function QuaterView(props: {
     }
   }, [ref.current]);
 
+  let quaters = Object.values(props.calender.years)
+    .map((year) =>
+      Object.entries(year.quaters).map(([quater, quaterData]) => ({
+        quater,
+        ...quaterData,
+      }))
+    )
+    .flat();
+
   const [startDate, setStartDate] = React.useState<Date>(
     props.startDate ? props.startDate : props.calender.startDate
   );
@@ -26,16 +35,24 @@ export function QuaterView(props: {
   );
 
   const updateStartIndex = (index: number) => {
-    const selectedYear = Object.keys(props.calender.years)[index - 1];
-    const year = props.calender.years[selectedYear];
-    setStartDate(year.startDate);
+    const selectedQuater = quaters[index - 1];
+    setStartDate(selectedQuater.startDate);
   };
 
   const updateEndIndex = (index: number) => {
-    const selectedYear = Object.keys(props.calender.years)[index - 2];
-    const year = props.calender.years[selectedYear];
-    setEndDate(year.endDate);
+    const selectedQuater = quaters[index - 2];
+    setEndDate(selectedQuater.endDate);
   };
+
+  const bottomRef: any = React.useRef(null);
+
+  React.useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({
+      behavior: "auto",
+      // behavior: "smooth"
+    });
+  }, [bottomRef.current]);
 
   return (
     <div style={{ position: "relative", overflowY: "hidden" }}>
@@ -43,8 +60,8 @@ export function QuaterView(props: {
         sliderMin={1}
         sliderMax={props.sliderMax}
         width={rangeWidth}
-        // setStartIndex={updateStartIndex}
-        // setEndIndex={updateEndIndex}
+        setStartIndex={updateStartIndex}
+        setEndIndex={updateEndIndex}
       />
       <div className="ui-container" ref={ref}>
         {Object.entries(props.calender.years).map(([year, quaters]) => (
@@ -84,6 +101,7 @@ export function QuaterView(props: {
             </div>
           </Panel>
         ))}
+        <div ref={bottomRef} />
       </div>
     </div>
   );

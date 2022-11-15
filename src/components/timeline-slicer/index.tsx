@@ -1,5 +1,5 @@
-import { createRef, useState } from "react";
-import { Calendar, Container, Content, Header } from "rsuite";
+import { useState } from "react";
+import { Container, Content, Header } from "rsuite";
 import "./index.css";
 import { QuaterView } from "./QuaterView";
 
@@ -50,8 +50,8 @@ const getSliderMax = (
 };
 
 function TimelineSlicer() {
-  const startDate = new Date(2022, 10, 11);
-  const endDate = new Date(2024, 0, 1);
+  const startDate = new Date(2019, 11);
+  const endDate = new Date();
   const calender = getCalender(startDate, endDate);
 
   console.log("Calender", calender);
@@ -94,7 +94,7 @@ function TimelineSlicer() {
           </ButtonGroup>
         </ButtonToolbar>
         <br />
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", width: "70%", margin: "auto" }}>
           <div ref={scrollRef} style={{ overflowX: "auto", zIndex: -1 }}>
             {ui === "year" && (
               <YearView calender={calender} sliderMax={sliderMax} />
