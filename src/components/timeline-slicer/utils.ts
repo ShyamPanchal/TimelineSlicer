@@ -121,7 +121,7 @@ export const getCalender = (startDate: Date, endDate: Date) => {
 
     if (!(_day in calender.years[_year].quaters[_quater].months[_month].days)) {
       calender.years[_year].quaters[_quater].months[_month].days[_day] =
-        new Date(_year, _month, _date);
+        new Date(_year, _month, _day);
     }
   }
   return calender;
