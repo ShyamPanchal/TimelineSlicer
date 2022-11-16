@@ -6,8 +6,10 @@ import { Calender, monthNames } from "./utils";
 export function MonthView(props: {
   calender: Calender;
   sliderMax: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date;
+  endDate: Date;
+  updateStartDate?: (start: Date) => void;
+  updateEndDate?: (end: Date) => void;
 }) {
   const ref: any = React.useRef(null);
   const [rangeWidth, setRangeWidth] = React.useState<number>(0);
@@ -30,23 +32,18 @@ export function MonthView(props: {
     .flat()
     .flat();
 
-  console.log("Months", months);
-
-  const [startDate, setStartDate] = React.useState<Date>(
-    props.startDate ? props.startDate : props.calender.startDate
-  );
-  const [endDate, setEndDate] = React.useState<Date>(
-    props.endDate ? props.endDate : props.calender.endDate
-  );
-
   const updateStartIndex = (index: number) => {
     const month = months[index - 1];
-    setStartDate(month.startDate);
+    if (props.updateStartDate) {
+      props.updateStartDate(month.startDate);
+    }
   };
 
   const updateEndIndex = (index: number) => {
     const month = months[index - 2];
-    setEndDate(month.endDate);
+    if (props.updateEndDate) {
+      props.updateEndDate(month.endDate);
+    }
   };
 
   const bottomRef: any = React.useRef(null);
@@ -86,8 +83,8 @@ export function MonthView(props: {
               <div className="sub-container">
                 {Object.entries(months.months).map(([month, _monthData]) => {
                   const selected =
-                    startDate <= _monthData.endDate &&
-                    endDate >= _monthData.startDate;
+                    props.startDate <= _monthData.endDate &&
+                    props.endDate >= _monthData.startDate;
                   return (
                     <Panel
                       key={month}

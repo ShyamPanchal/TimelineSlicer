@@ -6,8 +6,10 @@ import { Calender } from "./utils";
 export function YearView(props: {
   calender: Calender;
   sliderMax: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date;
+  endDate: Date;
+  updateStartDate?: (start: Date) => void;
+  updateEndDate?: (end: Date) => void;
 }) {
   const ref: any = React.useRef(null);
   const [rangeWidth, setRangeWidth] = React.useState<number>(0);
@@ -19,23 +21,20 @@ export function YearView(props: {
   }, []);
   // }, [ref.current]);
 
-  const [startDate, setStartDate] = React.useState<Date>(
-    props.startDate ? props.startDate : props.calender.startDate
-  );
-  const [endDate, setEndDate] = React.useState<Date>(
-    props.endDate ? props.endDate : props.calender.endDate
-  );
-
   const updateStartIndex = (index: number) => {
     const selectedYear = Object.keys(props.calender.years)[index - 1];
     const year = props.calender.years[selectedYear];
-    setStartDate(year.startDate);
+    if (props.updateStartDate) {
+      props.updateStartDate(year.startDate);
+    }
   };
 
   const updateEndIndex = (index: number) => {
     const selectedYear = Object.keys(props.calender.years)[index - 2];
     const year = props.calender.years[selectedYear];
-    setEndDate(year.endDate);
+    if (props.updateEndDate) {
+      props.updateEndDate(year.endDate);
+    }
   };
 
   const bottomRef: any = React.useRef(null);
@@ -60,7 +59,8 @@ export function YearView(props: {
       <div className="ui-container" ref={ref}>
         {Object.entries(props.calender.years).map(([year, _yearData]) => {
           const selected =
-            startDate <= _yearData.endDate && endDate >= _yearData.startDate;
+            props.startDate <= _yearData.endDate &&
+            props.endDate >= _yearData.startDate;
           return (
             <Panel
               key={year}

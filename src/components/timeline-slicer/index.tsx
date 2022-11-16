@@ -3,6 +3,7 @@ import { Container, Content, Header } from "rsuite";
 import "./index.css";
 import { QuaterView } from "./QuaterView";
 
+import * as React from "react";
 import { Button, ButtonGroup, ButtonToolbar } from "rsuite";
 import { DayView } from "./DayView";
 import { MonthView } from "./MonthView";
@@ -50,9 +51,13 @@ const getSliderMax = (
 };
 
 function TimelineSlicer() {
-  const startDate = new Date(2000, 11);
-  const endDate = new Date();
-  const calender = getCalender(startDate, endDate);
+  const _startDate = new Date();
+  _startDate.setFullYear(_startDate.getFullYear() - 3);
+  const _endDate = new Date();
+
+  const [startDate, setStartDate] = React.useState<Date>(_startDate);
+  const [endDate, setEndDate] = React.useState<Date>(_endDate);
+  const calender = getCalender(_startDate, _endDate);
 
   console.log("Calender", calender);
 
@@ -60,7 +65,7 @@ function TimelineSlicer() {
 
   const sliderMax = getSliderMax(calender, ui);
 
-  const enabled = (key: string) => (key === ui ? "primary" : "default");
+  const enabled = (key: string) => (key === ui ? "primary" : "ghost");
 
   const scrollRef = useHorizontalScroll();
 
@@ -92,21 +97,56 @@ function TimelineSlicer() {
               Days
             </Button>
           </ButtonGroup>
+          <Button appearance="primary">Apply</Button>
         </ButtonToolbar>
         <br />
-        <div style={{ position: "relative", width: "70%", margin: "auto" }}>
+        <div
+          style={{
+            position: "relative",
+            width: "70%",
+            margin: "auto",
+          }}
+        >
           <div ref={scrollRef} style={{ overflowX: "auto", zIndex: -1 }}>
             {ui === "year" && (
-              <YearView calender={calender} sliderMax={sliderMax} />
+              <YearView
+                calender={calender}
+                sliderMax={sliderMax}
+                startDate={startDate}
+                endDate={endDate}
+                updateStartDate={setStartDate}
+                updateEndDate={setEndDate}
+              />
             )}
             {ui === "quater" && (
-              <QuaterView calender={calender} sliderMax={sliderMax} />
+              <QuaterView
+                calender={calender}
+                sliderMax={sliderMax}
+                startDate={startDate}
+                endDate={endDate}
+                updateStartDate={setStartDate}
+                updateEndDate={setEndDate}
+              />
             )}
             {ui === "months" && (
-              <MonthView calender={calender} sliderMax={sliderMax} />
+              <MonthView
+                calender={calender}
+                sliderMax={sliderMax}
+                startDate={startDate}
+                endDate={endDate}
+                updateStartDate={setStartDate}
+                updateEndDate={setEndDate}
+              />
             )}
             {ui === "days" && (
-              <DayView calender={calender} sliderMax={sliderMax} />
+              <DayView
+                calender={calender}
+                sliderMax={sliderMax}
+                startDate={startDate}
+                endDate={endDate}
+                updateStartDate={setStartDate}
+                updateEndDate={setEndDate}
+              />
             )}
           </div>
         </div>

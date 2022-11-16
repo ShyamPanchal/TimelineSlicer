@@ -6,8 +6,10 @@ import { Calender } from "./utils";
 export function QuaterView(props: {
   calender: Calender;
   sliderMax: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date;
+  endDate: Date;
+  updateStartDate?: (start: Date) => void;
+  updateEndDate?: (end: Date) => void;
 }) {
   const ref: any = React.useRef(null);
   const [rangeWidth, setRangeWidth] = React.useState<number>(0);
@@ -27,21 +29,19 @@ export function QuaterView(props: {
     )
     .flat();
 
-  const [startDate, setStartDate] = React.useState<Date>(
-    props.startDate ? props.startDate : props.calender.startDate
-  );
-  const [endDate, setEndDate] = React.useState<Date>(
-    props.endDate ? props.endDate : props.calender.endDate
-  );
-
   const updateStartIndex = (index: number) => {
     const selectedQuater = quaters[index - 1];
-    setStartDate(selectedQuater.startDate);
+    if (props.updateStartDate) {
+      props.updateStartDate(selectedQuater.startDate);
+    }
   };
 
   const updateEndIndex = (index: number) => {
     const selectedQuater = quaters[index - 2];
-    setEndDate(selectedQuater.endDate);
+    // setEndDate(selectedQuater.endDate);
+    if (props.updateEndDate) {
+      props.updateEndDate(selectedQuater.endDate);
+    }
   };
 
   const bottomRef: any = React.useRef(null);
@@ -80,8 +80,8 @@ export function QuaterView(props: {
             <div className="sub-container">
               {Object.entries(quaters.quaters).map(([quater, _quaterData]) => {
                 const selected =
-                  startDate <= _quaterData.endDate &&
-                  endDate >= _quaterData.startDate;
+                  props.startDate <= _quaterData.endDate &&
+                  props.endDate >= _quaterData.startDate;
                 return (
                   <Panel
                     key={quater}

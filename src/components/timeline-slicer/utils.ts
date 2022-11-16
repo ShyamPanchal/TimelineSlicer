@@ -80,7 +80,7 @@ export const getCalender = (startDate: Date, endDate: Date) => {
 
   let _date: any = undefined;
   for (
-    _date = startDate;
+    _date = new Date(startDate.getTime());
     _date <= endDate;
     _date.setDate(_date.getDate() + 1)
   ) {

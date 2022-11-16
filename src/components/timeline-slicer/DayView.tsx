@@ -6,8 +6,10 @@ import { Calender, monthNames } from "./utils";
 export function DayView(props: {
   calender: Calender;
   sliderMax: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date;
+  endDate: Date;
+  updateStartDate?: (start: Date) => void;
+  updateEndDate?: (end: Date) => void;
 }) {
   const ref: any = React.useRef(null);
   const [rangeWidth, setRangeWidth] = React.useState<number>(0);
@@ -33,21 +35,18 @@ export function DayView(props: {
     .flat()
     .flat();
 
-  const [startDate, setStartDate] = React.useState<Date>(
-    props.startDate ? props.startDate : props.calender.startDate
-  );
-  const [endDate, setEndDate] = React.useState<Date>(
-    props.endDate ? props.endDate : props.calender.endDate
-  );
-
   const updateStartIndex = (index: number) => {
     const day = days[index - 1];
-    setStartDate(day.date);
+    if (props.updateStartDate) {
+      props.updateStartDate(day.date);
+    }
   };
 
   const updateEndIndex = (index: number) => {
     const day = days[index - 2];
-    setEndDate(day.date);
+    if (props.updateEndDate) {
+      props.updateEndDate(day.date);
+    }
   };
 
   const bottomRef: any = React.useRef(null);
@@ -88,7 +87,8 @@ export function DayView(props: {
                 {year} - {monthNames[parseInt(month)]}
                 <div className="sub-container">
                   {Object.entries(days.days).map(([day, date]) => {
-                    const selected = startDate <= date && endDate >= date;
+                    const selected =
+                      props.startDate <= date && props.endDate >= date;
                     return (
                       <Panel
                         key={day}
