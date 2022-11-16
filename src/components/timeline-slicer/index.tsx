@@ -50,7 +50,7 @@ const getSliderMax = (
 };
 
 function TimelineSlicer() {
-  const startDate = new Date(2019, 11);
+  const startDate = new Date(2000, 11);
   const endDate = new Date();
   const calender = getCalender(startDate, endDate);
 

@@ -12,7 +12,7 @@ export function DayView(props: {
   const ref: any = React.useRef(null);
   const [rangeWidth, setRangeWidth] = React.useState<number>(0);
   React.useEffect(() => {
-    console.log("width", ref.current ? ref.current.offsetWidth : 0);
+    // console.log("width", ref.current ? ref.current.offsetWidth : 0);
     if (ref.current) {
       setRangeWidth(ref.current.offsetWidth);
     }
